@@ -37,18 +37,18 @@ app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, "build")));
 
-app.get("/app", (req, res, err) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
-});
+// app.get("/app", (req, res, err) => {
+//   res.sendFile(path.join(__dirname, "build", "index.html"));
+// });
 
 //heroku
-// if (process.env.NODE_ENV === 'production'){
-//   app.use(express.static('Client/build'))
+if (process.env.NODE_ENV === 'production'){
+  app.use(express.static('Client/build'))
 
-//   app.get('*', (re,res) => {
-//     res.sendFile(path.join(__dirname,'Client', 'build', 'index.html'));
-//     })
-// }
+  app.get('*', (re,res) => {
+    res.sendFile(path.join(__dirname,'Client', 'build', 'index.html'));
+    })
+}
 
 //routes
 app.use('/', productRoute);
