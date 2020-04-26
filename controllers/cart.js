@@ -25,7 +25,7 @@ var get_cart = (req, res) => {
 };
 
 var create_order = async (req, res) => {
-  await Product.findById(req.body.id)
+  await Product.findById(req.body._id)
     .then(product => {
         if (!product) { //product not found
               return res.status(404).json({
@@ -43,7 +43,7 @@ var create_order = async (req, res) => {
                           const order = new Cart({
                           _id: mongoose.Types.ObjectId(),
                           quantity: req.body.quantity,
-                          product: req.body.id
+                          product: req.body._id
                           });
                           order.save()
                           .then(cart => {
