@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "build": "npm run build",
-    "heroku-postbuild": "npm run build "
+    "heroku-postbuild": "npm run build"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
