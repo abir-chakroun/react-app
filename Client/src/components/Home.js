@@ -23,7 +23,7 @@ constructor(){
   getProducts= async () => {
     this.CancelTokenSource= axios.CancelToken.source;
     try{
-    const res= await axios.get('http://localhost:3000/products',  {
+    const res= await axios.get('https://coffe-react.herokuapp.com/products',  {
       cancelToken: this.CancelTokenSource.token
     })
     this._isMounted && this.setState( {products: res.data.products})

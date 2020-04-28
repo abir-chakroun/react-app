@@ -73,10 +73,7 @@ var express = require('express');
               description: result.description,
               price: result.price,
               _id: result._id,
-              request: {
-                type: "GET",
-                url: "http://localhost:3000/" + result._id
-              }
+              
             }
           });
         })

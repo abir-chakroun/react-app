@@ -23,7 +23,7 @@ class Register extends Component {
 
         console.log(user);
 
-        axios.post('http://localhost:3000/user/signup',user)
+        axios.post('https://coffe-react.herokuapp.com/user/signup',user)
         .then(res => console.log(res.data))
 
     }

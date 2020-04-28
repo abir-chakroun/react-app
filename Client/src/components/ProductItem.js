@@ -18,7 +18,8 @@ AddToCart = async (add_product) => {
       price: add_product.price.toString(),
       description: add_product.description
      }
-  const res = await axios.post('http://localhost:3000/cart/',product, {cancelToken: this.CancelTokenSource.token})
+  const res = await axios.post('https://coffe-react.herokuapp.com/cart/',product, 
+  {cancelToken: this.CancelTokenSource.token})
       if(res.data) {
         console.log(res.data.message);
     }

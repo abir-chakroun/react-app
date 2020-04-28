@@ -32,7 +32,7 @@ class Cart extends Component {
       this.CancelTokenSource= axios.CancelToken.source;
       try {
       let result=[];
-      const res= await axios.get('http://localhost:3000/cart/',{cancelToken: this.CancelTokenSource.token}
+      const res= await axios.get('https://coffe-react.herokuapp.com/cart/',{cancelToken: this.CancelTokenSource.token}
       ) 
         if(res.data){ 
           console.log(res.data);

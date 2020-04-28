@@ -23,7 +23,7 @@ class CartItem extends Component {
   removeFromCart = async (id) =>{
     this.CancelTokenSource= axios.CancelToken.source;
     try {
-    const res= await axios.delete('http://localhost:3000/cart/'+id,
+    const res= await axios.delete('https://coffe-react.herokuapp.com/cart/'+id,
     {cancelToken: this.CancelTokenSource.token}
     ) 
       if(res.data){ 
@@ -52,7 +52,7 @@ class CartItem extends Component {
       //update quantity from backend
       this.CancelTokenSource= axios.CancelToken.source;
     try {
-    const res= await axios.post('http://localhost:3000/cart/'+id,
+    const res= await axios.post('https://coffe-react.herokuapp.com/cart/'+id,
     {cancelToken: this.CancelTokenSource.token}
     ) 
       if(res.data){ 
@@ -81,7 +81,7 @@ class CartItem extends Component {
       //update quantity from backend
     this.CancelTokenSource= axios.CancelToken.source;
     try {
-    const res= await axios.post('http://localhost:3000/cart/'+id,
+    const res= await axios.post('https://coffe-react.herokuapp.com/cart/'+id,
     {cancelToken: this.CancelTokenSource.token}
     ) 
       if(res.data){ 
