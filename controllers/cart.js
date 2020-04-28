@@ -3,36 +3,62 @@ const Product = require("../models/product");
 var express = require('express');
 const mongoose = require("mongoose");
 
-var get_cart = (req, res) => {
-  Cart.find()
-  .populate('product',['title','imagePath','price'])
-  .exec()
-    .then(docs => {
+exports.getCart = (req, res) => {
+      
+      if(Object.keys(req.query).length>0){ 
+        Cart.findById(req.query.id)
+        .populate('product',['title','imagePath','price'])
+        .exec()
+        .then(order => {
+          if (!order) {
+            return res.status(404).json({
+              message: "Order not found"
+            });
+          }
+    
           res.send({
-            count: docs.length,
-            cart: docs.map(doc => ({
-            _id: doc._id,
-            quantity: doc.quantity,
-            product: doc.product})
-            )
+              count: 1,
+              cart: order   
         })
-      })
-    .catch(err => {
-      res.status(500).json({
-        error: err
-      });
-    });
+        })
+        .catch(err => {
+          res.status(500).json({
+            error: err
+          });
+        });
+      }
+      else{
+          console.log(req.query)
+          var result = [];
+          Cart.find()
+          .populate('product',['title','imagePath','price'])
+          .exec()
+            .then(docs => {
+                for(i=0;i<docs.length;i++){
+                  result.push({
+                      _id:docs[i]._id,
+                      quantity:docs[i].quantity,
+                      product:docs[i].product,
+                  })
+                }
+                res.send({
+                  cart: result
+            })
+          }) 
+            .catch(err => {
+              res.status(500).json({
+                error: err
+              });
+            });
+          }
 };
 
-var create_order = async (req, res) => {
-  await Product.findById(req.body._id)
+exports.createOrder =  (req, res) => {
+   Product.findById(req.body._id)
+    .exec()
     .then(product => {
-        if (!product) { //product not found
-              return res.status(404).json({
-                message: "Product not found"
-              });
-        }
-      else{     
+      console.log("from DB  " + product._id);
+        if (product) { 
               Cart.findOneAndUpdate({product:product._id},{$inc: {quantity: 1}}, (err,result)=> {
                 if (result) {
                             res.send({
@@ -57,6 +83,11 @@ var create_order = async (req, res) => {
               })
   
           }
+          else{
+            return res.send({
+                message: "Cannot find product"
+              });
+          }   
     })
     .catch(err => {
       console.log(err);
@@ -65,31 +96,9 @@ var create_order = async (req, res) => {
     });
   }
 
-var get_order = (req, res) => {
-  Cart.findById(req.params.orderId)
-    .populate('product',['title','imagePath','price'])
-    .exec()
-    .then(order => {
-      if (!order) {
-        return res.status(404).json({
-          message: "Order not found"
-        });
-      }
-      // Product.findById(order.product)
-      // .then(prod => {
-      res.send({
-          count: 1,
-          cart: order   
-    })
-    })
-    .catch(err => {
-      res.status(500).json({
-        error: err
-      });
-    });
-};
 
-var delete_order = (req, res) => {
+exports.deleteOrder = (req, res) => {
+  console.log("in delete method")
   Cart.remove({ _id: req.params.orderId })
     .exec()
     .then(result => {
@@ -104,7 +113,4 @@ var delete_order = (req, res) => {
     });
 };
 
-exports.get_cart=get_cart;
-exports.create_order=create_order;
-exports.get_order=get_order;
-exports.delete_order=delete_order;
+

@@ -3,12 +3,8 @@ var router = express.Router();
 const ProductsController= require('../controllers/product');
 const checkAuth = require('../check-auth/checkAuth');
 
-router.get('/',  ProductsController.getAllProducts);
-router.get('/:id', ProductsController.getProductById);
-router.get('/:title', ProductsController.getProductByName);
-
-
-
+router.get('/',  ProductsController.getProducts);
+router.post('/',  ProductsController.createProduct);
 
 
 module.exports = router;

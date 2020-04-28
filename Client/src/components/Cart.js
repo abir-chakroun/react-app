@@ -20,8 +20,9 @@ class Cart extends Component {
 
   constructor(props) {
     super(props);
+    console.log(this.props);
     this.state={tot_qty:0, tot_price:0,
-    cart_products:[{id:0, product:{}, qty:0}]
+    cart_products:[{_id:0, product:{}, qty:0}]
     }
     this._isMounted = false;
     this.getCart=this.getCart.bind(this);
@@ -31,12 +32,13 @@ class Cart extends Component {
       this.CancelTokenSource= axios.CancelToken.source;
       try {
       let result=[];
-      const res= await axios.get('http://localhost:3000/cart/all',{cancelToken: this.CancelTokenSource.token}
+      const res= await axios.get('http://localhost:3000/cart/',{cancelToken: this.CancelTokenSource.token}
       ) 
         if(res.data){ 
+          console.log(res.data);
           let tot_qty=0; let tot_price=0;
           for (let i=0;i<res.data.count;i++){
-            result.push({id:res.data.cart[i]._id, product:res.data.cart[i].product, qty:res.data.cart[i].quantity});
+            result.push({_id:res.data.cart[i]._id, product:res.data.cart[i].product, qty:res.data.cart[i].quantity});
             tot_qty+= res.data.cart[i].quantity    
             tot_price+= res.data.cart[i].quantity * res.data.cart[i].product.price      
           } 
@@ -91,7 +93,7 @@ render(){
     let tot_qty=this.statetot_qty;
     listItems = this.state.cart_products.map( (order) =>{
     return (
-      <CartItem  key={order.id} id={order.id} order={order.product} qty={order.qty}/>
+      <CartItem  key={order._id} _id={order._id} order={order.product} qty={order.qty}/>
       
      ) })  
     

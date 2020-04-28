@@ -3,14 +3,12 @@ var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var flash = require('connect-flash');
-var productRoute = require('./routes/product');
-var userRoute = require('./routes/user');
-var cartRoute = require('./routes/cart');
-var createError = require("http-errors");
 var cors = require("cors");
 var mongoose= require('mongoose');
 
+var productRoute = require('./routes/product');
+var userRoute = require('./routes/user');
+var cartRoute = require('./routes/cart');
 
 
 require('dotenv').config()
@@ -23,9 +21,18 @@ app.use(express.json());
 
 //connect to mongoDB
 
-mongoose.connect(process.env.ATLAS_URI || 'mongodb+srv://user:passwordabir0000@cluster0-edhvj.mongodb.net/shopping', {useNewUrlParser: true, useUnifiedTopology: true})    
-  .then(() => console.log('MongoDB connected...'))
-  .catch(err => console.log('ERROR connecting !!!! ' + err));
+mongoose.connect('mongodb+srv://abir:passwordabir0000@cluster0-edhvj.mongodb.net/test?retryWrites=true&w=majority', 
+{ useUnifiedTopology: true,
+  useNewUrlParser: true,
+  useFindAndModify: false
+})
+.then(() => console.log('DB Connected!!!'))
+.catch(err => {
+    console.log('did not work', err);
+});
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+
 
 
 app.use(bodyParser.json());
@@ -44,35 +51,40 @@ app.get("/app", (req, res, err) => {
 console.log("    " + __dirname);
 
 
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  if (req.method === "OPTIONS") {
+    res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
+    return res.status(200).json({});
+  }
+  next();
+});
+
 
 //routes
-app.use('/', productRoute);
+app.use('/products', productRoute);
 app.use('/user', userRoute);
 app.use('/cart', cartRoute);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-}); 
-
-// error handlers
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+app.use((req, res, next) => {
+  const error = new Error("Not found");
+  error.status = 404;
+  next(error);
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render("error");
+app.use((error, req, res, next) => {
+  res.status(error.status || 500);
+  res.json({
+    error: {
+      message: error.message
+    }
+  });
 });
 
 module.exports = app;

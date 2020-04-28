@@ -2,66 +2,8 @@ import React, { Component } from "react";
 import { Badge, NavDropdown, Nav } from 'react-bootstrap'
 import { Form, Button,  FormControl} from "react-bootstrap";
 import logo from '..//images/logo.png'
-import axios from 'axios';
 import Navbar from 'react-bootstrap/Navbar'
  class Menu extends Component{ 
-
-  constructor() {
-    super();
-    this.state=
-    {tot_qty:0,
-    }
-    this._isMounted = false;
-    this.getCart=this.getCart.bind(this);
-    }
-
-    getCart= async () => {//get cart products from DB
-      this.CancelTokenSource= axios.CancelToken.source;
-      try {
-      let result=[];
-      const res= await axios.get('http://localhost:3000/cart/all',{cancelToken: this.CancelTokenSource.token}
-      ) 
-        if(res.data){ 
-          let tot_qty=0;
-          for (let i=0;i<res.data.count;i++){
-            tot_qty+= res.data.cart[i].quantity          
-          } 
-          this._isMounted && this.setState({ tot_qty:tot_qty});
-          console.log(this.state);
-          }
-        else {console.log('empty cart')}
-      }
-      catch(error){
-        if(axios.isCancel(error)){
-          console.log('Error', error.message)
-        }
-        if (error.response) 
-          console.log(error.response.data);
-        else if (error.request) 
-            console.log(error.request.data);
-        else {
-          throw error;
-        }
-          }
-      finally{
-          this.CancelTokenSource =null
-        }
-
-    } 
-   
-  componentDidMount() {
-    this._isMounted = true;
-    this._isMounted && this.getCart();
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
- }
-
- componentDidUpdate(){
-  this._isMounted = true;
-  this._isMounted && this.getCart();
- }
 
  render(){
   return(
@@ -80,8 +22,8 @@ import Navbar from 'react-bootstrap/Navbar'
               <NavDropdown.Item href="/register">Register</NavDropdown.Item>
               <NavDropdown.Item href="/login">Login</NavDropdown.Item>
               </NavDropdown>
-      <Nav.Link href="/cart" onClick={this.getCart} > Cart      
-      <Badge pill variant="danger" className='badge'>{this.state.tot_qty}</Badge>
+      <Nav.Link href="/cart"> Cart      
+      <Badge pill variant="danger" className='badge'>{}</Badge>
     </Nav.Link>
     </Nav>
     <Form inline>

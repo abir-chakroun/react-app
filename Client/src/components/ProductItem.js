@@ -11,7 +11,8 @@ constructor(props){
 AddToCart = async (add_product) => {
   this.CancelTokenSource= axios.CancelToken.source;
   try{
-    const product={ id: add_product.id,
+    const product={ 
+      _id: add_product._id,
       title: add_product.title,
       imagePath: add_product.imagePath,
       price: add_product.price.toString(),
