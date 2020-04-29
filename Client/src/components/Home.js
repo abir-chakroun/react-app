@@ -23,11 +23,13 @@ constructor(){
   getProducts= async () => {
     this.CancelTokenSource= axios.CancelToken.source;
     try{
-    const res= await axios.get('https://coffe-react.herokuapp.com/products',  {
+      const res= await axios.get('/products',  {
       cancelToken: this.CancelTokenSource.token
     })
-    this._isMounted && this.setState( {products: res.data.products})
-    }
+      if(res.data){
+      this._isMounted && this.setState( {products: res.data.products})
+      }
+  }
     catch(error){
       if(axios.isCancel(error)){
         console.log('Error', error.message)
@@ -57,7 +59,7 @@ finally{
 
 
   render(){
-    console.log(this.state);
+    console.log(this.state.products);
     return (   
     <div>
     <ControlledCarousel />

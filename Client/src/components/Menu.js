@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Badge, NavDropdown, Nav } from 'react-bootstrap'
 import { Form, Button,  FormControl} from "react-bootstrap";
+import {Link} from 'react-router-dom';
 import logo from '..//images/logo.png'
 import Navbar from 'react-bootstrap/Navbar'
  class Menu extends Component{ 
@@ -15,17 +16,19 @@ import Navbar from 'react-bootstrap/Navbar'
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">
     <Nav className="mr-auto">
-      <Nav.Link href="/about"> About</Nav.Link>
-      <Nav.Link href="/contact">Contact</Nav.Link>
-      <Nav.Link >User</Nav.Link>
+      <Nav.Item> <Link to="/about"> About </Link> </Nav.Item>
+      <Nav.Item> <Link to="/contact">Contact </Link> </Nav.Item>
+      <Nav.Item >User </Nav.Item>
               <NavDropdown title="" id="basic-nav-dropdown"> 
-              <NavDropdown.Item href="/register">Register</NavDropdown.Item>
-              <NavDropdown.Item href="/login">Login</NavDropdown.Item>
+              <NavDropdown.Item > <Link to="/register"> Register </Link> </NavDropdown.Item>
+              <NavDropdown.Item><Link to="/login"> Login </Link></NavDropdown.Item>
               </NavDropdown>
-      <Nav.Link href="/cart"> Cart      
+      </Nav>
+      <Nav.Item >
+      <Link to="/cart"> <i class="fas fa-shopping-cart"></i>
       <Badge pill variant="danger" className='badge'>{}</Badge>
-    </Nav.Link>
-    </Nav>
+      </Link>
+       </Nav.Item>
     <Form inline>
       <FormControl type="text" placeholder="Search" className="mr-sm-2" />
       <Button variant="outline-info">Search</Button>

@@ -18,31 +18,31 @@ const CustomTableCell = withStyles(theme => ({
 
 class Cart extends Component {
 
-  constructor(props) {
-    super(props);
-    console.log(this.props);
-    this.state={tot_qty:0, tot_price:0,
-    cart_products:[{_id:0, product:{}, qty:0}]
+  constructor() {
+    super();
+    this.state={
+      tot_qty:0, 
+      tot_price:0,
+      cart_products:[{_id:0, product:{}, qty:0}]
     }
     this._isMounted = false;
     this.getCart=this.getCart.bind(this);
     }
 
-    getCart= async () => {//get cart products from DB
+    getCart= async () => {         //get cart products from DB
+      let totQty=0;  let totPrice=0; let result=[]; let i=0;
       this.CancelTokenSource= axios.CancelToken.source;
       try {
-      let result=[];
-      const res= await axios.get('https://coffe-react.herokuapp.com/cart/',{cancelToken: this.CancelTokenSource.token}
-      ) 
+      const res= await axios.get('/cart',{cancelToken: this.CancelTokenSource.token}) 
         if(res.data){ 
-          console.log(res.data);
-          let tot_qty=0; let tot_price=0;
-          for (let i=0;i<res.data.count;i++){
-            result.push({_id:res.data.cart[i]._id, product:res.data.cart[i].product, qty:res.data.cart[i].quantity});
-            tot_qty+= res.data.cart[i].quantity    
-            tot_price+= res.data.cart[i].quantity * res.data.cart[i].product.price      
-          } 
-          this._isMounted && this.setState({ cart_products:result, tot_qty:tot_qty, tot_price:tot_price});
+              res.data.cart.map(elem => {
+              result.push({_id:elem._id, 
+              product:elem.product, 
+              qty:elem.quantity})
+              totQty+= elem.quantity;
+              totPrice+= elem.quantity * elem.product.price;  
+          })
+          this._isMounted && this.setState({ tot_qty:totQty, tot_price:totPrice, cart_products:result});
           console.log(this.state);
           }
         else {console.log('empty cart')}
@@ -65,7 +65,7 @@ class Cart extends Component {
 
     } 
    
-  componentDidMount() {
+  componentDidMount(prevProps) {
     this._isMounted = true;
     this._isMounted && this.getCart();
   }
@@ -73,6 +73,7 @@ class Cart extends Component {
   componentWillUnmount() {
     this._isMounted = false;
  }
+ 
 
  componentDidUpdate(){
   this._isMounted = true;
@@ -81,7 +82,6 @@ class Cart extends Component {
 
 
 render(){
-  console.log(this.state);
 
   if ( !this.state) {
     return (   <div> <h1> Your cart is empty ! </h1>  
@@ -90,7 +90,6 @@ render(){
     )
   }
     let listItems;
-    let tot_qty=this.statetot_qty;
     listItems = this.state.cart_products.map( (order) =>{
     return (
       <CartItem  key={order._id} _id={order._id} order={order.product} qty={order.qty}/>

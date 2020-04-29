@@ -16,7 +16,10 @@ class Products extends Component{
             <ProductItem  key={current_product.id} product={current_product}  />  )
             })   
         }
-        console.log(this.props);
+        else{
+            console.log("cannot find any products to display! empty props")
+        }
+        
         return(
 
         <div className="container" >

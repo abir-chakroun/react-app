@@ -23,7 +23,7 @@ class Login extends Component {
 
         console.log(user);
 
-        axios.post('https://coffe-react.herokuapp.com/user/login',user)
+        axios.post('/user/login',user)
         .then(res => console.log(res.data))
 
     }

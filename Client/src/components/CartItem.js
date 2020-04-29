@@ -17,13 +17,12 @@ class CartItem extends Component {
       total_price:0
     }
     this._isMounted = false;
-    this.removeFromCart=this.removeFromCart.bind(this);
   }
 
   removeFromCart = async (id) =>{
     this.CancelTokenSource= axios.CancelToken.source;
     try {
-    const res= await axios.delete('https://coffe-react.herokuapp.com/cart/'+id,
+    const res= await axios.delete('/cart/'+id,
     {cancelToken: this.CancelTokenSource.token}
     ) 
       if(res.data){ 
@@ -36,9 +35,9 @@ class CartItem extends Component {
         console.log('Error', error.message)
       }
       if (error.response) 
-        console.log(error.response.data);
+        console.log(error.response);
       else if (error.request) 
-          console.log(error.request.data);
+          console.log(error.request);
       else {
         throw error;
       }
@@ -52,7 +51,7 @@ class CartItem extends Component {
       //update quantity from backend
       this.CancelTokenSource= axios.CancelToken.source;
     try {
-    const res= await axios.post('https://coffe-react.herokuapp.com/cart/'+id,
+    const res= await axios.post('/cart/'+id,
     {cancelToken: this.CancelTokenSource.token}
     ) 
       if(res.data){ 
@@ -81,7 +80,7 @@ class CartItem extends Component {
       //update quantity from backend
     this.CancelTokenSource= axios.CancelToken.source;
     try {
-    const res= await axios.post('https://coffe-react.herokuapp.com/cart/'+id,
+    const res= await axios.post('/cart/'+id,
     {cancelToken: this.CancelTokenSource.token}
     ) 
       if(res.data){ 
@@ -107,21 +106,18 @@ class CartItem extends Component {
 
   }
 
-  componentDidMount() {
-    this._isMounted = true;
-    this._isMounted && this.removeFromCart();
-  }
-
   componentWillUnmount() {
     this._isMounted = false;
  }
 
- componentDidUpdate(){
-  this._isMounted = true;
-  this._isMounted && (this.removeFromCart() ||this.AddQuantity() || this.MinusQuantity()) ;
- }
+//  componentDidUpdate(){
+//   this._isMounted = true;
+//   this._isMounted && (this.removeFromCart() ||this.AddQuantity() || this.MinusQuantity()) ;
+//  }
 
   render(){
+    console.log(this.props)
+
     return (   
 <div>
   <TableRow>
@@ -134,18 +130,18 @@ class CartItem extends Component {
   <TableCell style={{  width: "100px" }}>
   <div class="btn-group btn-group-justified" role="group" aria-label="...">
   <div class="btn-group" role="group">
-    <button type="button" class="btn btn-default btn-danger" onClick={() => this.MinusQuantity(this.props.id)} >-</button>
+    <button type="button" class="btn btn-default btn-danger" onClick={() => this.MinusQuantity(this.props._id)} >-</button>
   </div>
   <div class="btn-group" role="group">
   <button type="button" class="btn btn-default"> {this.props.qty} </button>  
     </div>
   <div class="btn-group" role="group">
-    <button type="button" class="btn btn-default btn-success" onClick={() => this.AddQuantity(this.props.id)}>+</button>
+    <button type="button" class="btn btn-default btn-success" onClick={() => this.AddQuantity(this.props._id)}>+</button>
   </div>
 </div>
   </TableCell>
   <TableCell >	<var className="price">{this.props.order.price} </var> </TableCell>
-  <TableCell > <a href="" className="btn btn-outline-danger" onClick={() => this.removeFromCart(this.props.id)}> × Remove</a> </TableCell>
+  <TableCell > <a className="btn btn-danger" onClick={() => this.removeFromCart(this.props._id)}> Remove </a> </TableCell>
   </TableRow>
 </div> 
   )

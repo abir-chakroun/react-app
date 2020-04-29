@@ -15,10 +15,10 @@ AddToCart = async (add_product) => {
       _id: add_product._id,
       title: add_product.title,
       imagePath: add_product.imagePath,
-      price: add_product.price.toString(),
+      price: add_product.price,
       description: add_product.description
      }
-  const res = await axios.post('https://coffe-react.herokuapp.com/cart/',product, 
+  const res = await axios.post('/cart/',product, 
   {cancelToken: this.CancelTokenSource.token})
       if(res.data) {
         console.log(res.data.message);
@@ -43,17 +43,12 @@ finally{
 }
 }
 
-componentDidMount() {
-  this._isMounted = true;
-  this._isMounted && this.AddToCart();
-}
-
 componentWillUnmount() {
   this._isMounted = false;
 }
 
     render() {  
-
+      console.log(this.props);
     return(
             <div className="col-lg-4 d-flex align-items-stretch">
                 <div className="card">

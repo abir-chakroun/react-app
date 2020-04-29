@@ -21,7 +21,7 @@ app.use(express.json());
 
 //connect to mongoDB
 
-mongoose.connect('mongodb+srv://abir:passwordabir0000@cluster0-edhvj.mongodb.net/test?retryWrites=true&w=majority', 
+mongoose.connect(process.env.ATLAS_URI||'mongodb+srv://abir:passwordabir0000@cluster0-edhvj.mongodb.net/test?retryWrites=true&w=majority', 
 { useUnifiedTopology: true,
   useNewUrlParser: true,
   useFindAndModify: false
