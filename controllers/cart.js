@@ -114,3 +114,18 @@ exports.deleteOrder = (req, res) => {
 };
 
 
+exports.UpdateQuantity = (req,res) => {
+  const currentId = req.params.orderId;
+  const value = req.body.value;
+  Cart.findOneAndUpdate({_id:currentId},{$inc: {quantity: value}})
+  .then(result => {
+      res.send({
+        message: "cart quantity updated",
+      })
+    })
+    .catch(err => {
+  res.status(500).json({
+    error: err });
+})
+}
+  

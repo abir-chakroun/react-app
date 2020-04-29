@@ -49,16 +49,20 @@ class CartItem extends Component {
 
   MinusQuantity = async (id) => {
       //update quantity from backend
+      const val= {value: -1};
       this.CancelTokenSource= axios.CancelToken.source;
     try {
-    const res= await axios.post('/cart/'+id,
-    {cancelToken: this.CancelTokenSource.token}
-    ) 
-      if(res.data){ 
-          //
-        }
-      else {console.log('cannot update product from cart')}
+    if (this.state.qty===0){
+          return null
     }
+    else{
+    const res= await axios.put('/cart/'+id,val, {cancelToken: this.CancelTokenSource.token}) 
+      if(res.data){ 
+          let Updatedqty= this.state.qty -1
+          this._isMounted && this.setState({qty: Updatedqty})
+        }
+    }
+  }
     catch(error){
       if(axios.isCancel(error)){
         console.log('Error', error.message)
@@ -79,15 +83,21 @@ class CartItem extends Component {
   AddQuantity = async (id) => {
       //update quantity from backend
     this.CancelTokenSource= axios.CancelToken.source;
+    const val= {value: 1};
     try {
-    const res= await axios.post('/cart/'+id,
+      if (this.state.qty===10){
+        return null
+  }
+  else{
+    const res= await axios.put('/cart/'+id,val,
     {cancelToken: this.CancelTokenSource.token}
     ) 
       if(res.data){ 
-            //
+        let Updatedqty= this.state.qty+1;
+        this._isMounted && this.setState({qty: Updatedqty});
         }
-      else {console.log('cannot update product from cart')}
     }
+  }
     catch(error){
       if(axios.isCancel(error)){
         console.log('Error', error.message)
@@ -117,35 +127,38 @@ class CartItem extends Component {
 
   render(){
     console.log(this.props)
+    console.log(this.state)
 
-    return (   
-<div>
-  <TableRow>
-  <TableCell >
-  <Avatar style={{ height: "100px", width: "100px" }}
-          src={this.props.order.imagePath }
- />    
-  </TableCell>
-  <TableCell style={{  width: "150px" }} ><h6 className="title text-truncate">{this.props.order.title} </h6></TableCell>
-  <TableCell style={{  width: "100px" }}>
-  <div class="btn-group btn-group-justified" role="group" aria-label="...">
-  <div class="btn-group" role="group">
-    <button type="button" class="btn btn-default btn-danger" onClick={() => this.MinusQuantity(this.props._id)} >-</button>
-  </div>
-  <div class="btn-group" role="group">
-  <button type="button" class="btn btn-default"> {this.props.qty} </button>  
-    </div>
-  <div class="btn-group" role="group">
-    <button type="button" class="btn btn-default btn-success" onClick={() => this.AddQuantity(this.props._id)}>+</button>
-  </div>
-</div>
-  </TableCell>
-  <TableCell >	<var className="price">{this.props.order.price} </var> </TableCell>
-  <TableCell > <a className="btn btn-danger" onClick={() => this.removeFromCart(this.props._id)}> Remove </a> </TableCell>
-  </TableRow>
-</div> 
-  )
-
-    }
+    if(this.props.order){
+      return (   
+      <div>
+        <TableRow>
+        <TableCell >
+        <Avatar style={{ height: "100px", width: "100px" }}
+                src={this.props.order.imagePath }
+      />    
+        </TableCell>
+        <TableCell style={{  width: "150px" }} ><h6 className="title text-truncate">{this.props.order.title} </h6></TableCell>
+        <TableCell style={{  width: "100px" }}>
+        <div class="btn-group btn-group-justified" role="group" aria-label="...">
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-default btn-danger" onClick={() => this.MinusQuantity(this.props._id)} >-</button>
+        </div>
+        <div class="btn-group" role="group">
+        <button type="button" class="btn btn-default"> {this.props.qty} </button>  
+          </div>
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-default btn-success" onClick={() => this.AddQuantity(this.props._id)}>+</button>
+        </div>
+      </div>
+        </TableCell>
+        <TableCell >	<var className="price">{this.props.order.price} </var> </TableCell>
+        <TableCell > <Button className="btn btn-danger" onClick={() => this.removeFromCart(this.props._id)}> Remove </Button> </TableCell>
+        </TableRow>
+      </div> 
+        )
+      }
+      else{ console.log("empty props from Cart component")}
+          }
 }
 export default CartItem;

@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import ControlledCarousel from "../components/ControlledCarousel";
 import Products from '../components/Products';
-import Menu from '../components/Menu';
 import axios from 'axios';
 
 class Home extends Component {

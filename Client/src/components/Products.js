@@ -1,14 +1,10 @@
 import React, { Component } from "react";
 import ProductItem from "./ProductItem.js";
-import PropTypes from 'prop-types';
 class Products extends Component{
-    constructor(props) {
-        super(props);
-         }
       
-
     render() {
         let products = this.props.products;
+        console.log(products);
         let listItems;
         if(products){
             listItems = products.map( (current_product) =>{

@@ -61,22 +61,35 @@ var express = require('express');
         description: req.body.description,
         price: req.body.price
       });
-      product
-        .save()
-        .then(result => {
-          console.log(result);
-          res.status(201).json({
-            message: "Created product successfully",
-            createdProduct: {
-              title: result.title,
-              imagePath: result.imagePath,
-              description: result.description,
-              price: result.price,
-              _id: result._id,
-              
-            }
-          });
-        })
+      Product.findOne({title:product.title} && {imagePath:product.imagePath} && {price:product.price} && {description:product.description})
+      .exec()
+      .then(doc => {
+        if (doc){
+          res.send({message:"product already exists in DB"})}
+        else{
+              product
+                .save()
+                .then(result => {
+                  console.log(result);
+                  res.status(201).json({
+                    message: "Created product successfully",
+                    createdProduct: {
+                      title: result.title,
+                      imagePath: result.imagePath,
+                      description: result.description,
+                      price: result.price,
+                      _id: result._id,
+                    }
+                  });
+                })
+                .catch(err => {
+                  console.log(err);
+                  res.status(500).json({
+                    error: err
+                  });
+                });
+              }
+            })
         .catch(err => {
           console.log(err);
           res.status(500).json({
@@ -86,3 +99,15 @@ var express = require('express');
     };
 
 
+exports.deleteProduct= (req,res)=>{
+  console.log(req.params)
+  Product.remove({ _id: req.params.id })
+  .exec()
+  .then(result => {
+    res.send({message: "product deleted from DB !"})
+  })
+  .catch(err =>{res.status(500).json({
+    error: err
+  });
+  })
+}

@@ -5,6 +5,8 @@ const checkAuth = require('../check-auth/checkAuth');
 
 router.get('/',  ProductsController.getProducts);
 router.post('/',  ProductsController.createProduct);
+router.delete('/:id',  ProductsController.deleteProduct);
+
 
 
 module.exports = router;
