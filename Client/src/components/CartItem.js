@@ -1,27 +1,22 @@
 import React, {Component} from 'react';
-import { Button} from "react-bootstrap";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import Avatar from "@material-ui/core/Avatar";
 import axios from 'axios';
-
-
 
 class CartItem extends Component {
  
   constructor(props) {
     super(props);
     this.state = { 
-      qty: 0,
-      total_price:0
+      qty: this.props.qty,
+      total_price:this.props.qty*this.props.order.price
     }
     this._isMounted = false;
   }
 
   removeFromCart = async (id) =>{
+    
     this.CancelTokenSource= axios.CancelToken.source;
     try {
-    const res= await axios.delete('http://localhost:3000/cart/'+id,
+    const res= await axios.delete('/cart/'+id,
     {cancelToken: this.CancelTokenSource.token}
     ) 
       if(res.data){ 
@@ -48,18 +43,23 @@ class CartItem extends Component {
 
   MinusQuantity = async (id) => {
     //update quantity from backend
-    const val= {value: -1};
     this.CancelTokenSource= axios.CancelToken.source;
     try {
+    const val= {value: -1}
     if (this.state.qty===0){
+      console.log("qty null")
           return null
     }
     else{
-    const res= await axios.put('http://localhost:3000/cart/'+ id, val, {cancelToken: this.CancelTokenSource.token}) 
+    console.log('updating qty...')
+    const res= await axios.put('/cart/'+ id, val, {cancelToken: this.CancelTokenSource.token}) 
       if(res.data){ 
-          let Updatedqty= this.state.qty -1
+          console.log(res.data)
+          let Updatedqty= this.state.qty-1
           this._isMounted && this.setState({qty: Updatedqty})
+          console.log(this.state.qty)
         }
+      else{console.log("found no response from BD")}
     }
   }
     catch(error){
@@ -80,22 +80,18 @@ class CartItem extends Component {
   }
 
   AddQuantity = async (id) => {
-      //update quantity from backend
     this.CancelTokenSource= axios.CancelToken.source;
-    const val= {value: 1};
     try {
-      if (this.state.qty===10){
-        return null
-  }
-  else{
-    const res= await axios.put('http://localhost:3000/cart/'+id,val,
+    const val= {value: 1};
+    const res= await axios.put('/cart/'+id,val,
     {cancelToken: this.CancelTokenSource.token}
     ) 
       if(res.data){ 
+        console.log(res.data)
         let Updatedqty= this.state.qty+1;
         this._isMounted && this.setState({qty: Updatedqty});
         }
-    }
+        console.log(this.state.qty)
   }
     catch(error){
       if(axios.isCancel(error)){
@@ -119,43 +115,59 @@ class CartItem extends Component {
     this._isMounted = false;
  }
 
-//  componentDidUpdate(){
-//   this._isMounted = true;
-//   this._isMounted && (this.removeFromCart() ||this.AddQuantity() || this.MinusQuantity()) ;
-//  }
-
   render(){
-
+    console.log(this.props);
     if(this.props.order){
       return (   
-      <div>
-        <TableRow>
-        <TableCell >
-        <Avatar style={{ height: "100px", width: "100px" }}
-                src={this.props.order.imagePath }
-      />    
-        </TableCell>
-        <TableCell style={{  width: "150px" }} ><h6 className="title text-truncate">{this.props.order.title} </h6></TableCell>
-        <TableCell style={{  width: "100px" }}>
-        <div class="btn-group btn-group-justified" role="group" aria-label="...">
-        <div class="btn-group" role="group">
-          <button type="button" class="btn btn-default btn-danger" onClick={() => this.MinusQuantity(this.props._id)} >-</button>
-        </div>
-        <div class="btn-group" role="group">
-        <button type="button" class="btn btn-default"> {this.props.qty} </button>  
+        <div className='row my-2 text-capitalize text-center'> 
+          
+          <div className='col-10 mx-auto col-lg-2'>
+            <img className='img-fluid ml-5' style={{ height: "5rem", width: "5rem", borderRadius: "3px" }}
+                    alt='productImage' src={this.props.order.imagePath }/>    
           </div>
-        <div class="btn-group" role="group">
-          <button type="button" class="btn btn-default btn-success" onClick={() => this.AddQuantity(this.props._id)}>+</button>
-        </div>
-      </div>
-        </TableCell>
-        <TableCell >	<var className="price">{this.props.order.price} </var> </TableCell>
-        <TableCell > <Button className="btn btn-danger" onClick={() => this.removeFromCart(this.props._id)}> Remove </Button> </TableCell>
-        </TableRow>
-      </div> 
+
+          <div className='col-10 mx-auto col-lg-2'>
+          <span className='d-lg-none'>product: </span>
+          {this.props.order.title}
+          </div>
+
+          <div className='col-10 mx-auto col-lg-2'>
+          <span className='d-lg-none'>price: </span>
+          {this.props.order.price}
+          </div>
+
+          <div className='col-10 mx-auto col-lg-2'>
+            <div className='d-flex.justify-content-center' role="group">
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-default btn-danger" onClick={() => this.MinusQuantity(this.props._id)}> - </button>
+              </div>
+              <div class="btn-group" role="group">
+              <button type="button" class="btn btn-default"> {this.state.qty} </button>  
+                </div>
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-default btn-success" onClick={() => this.AddQuantity(this.props._id)}> + </button>
+              </div>
+              </div>
+          </div>
+
+          <div className='col-10 mx-auto col-lg-2'>
+            <div className='cart-icon' onClick={() => {if (window.confirm('Are you sure you wish to delete this item?')){this.removeFromCart(this.props._id) }}}>
+              <i className='fas fa-trash'/>
+            </div>
+          </div>
+
+
+          <div className='col-10 mx-auto col-lg-2'>
+          <strong> item total: {this.state.total_price} DT </strong>
+          </div>
+
+    </div>
         )
       }
       else{ console.log("empty props from Cart component")}
           }
 }
 export default CartItem;
+
+
+

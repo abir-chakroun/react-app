@@ -22,7 +22,7 @@ constructor(){
   getProducts= async () => {
     this.CancelTokenSource= axios.CancelToken.source;
     try{
-      const res= await axios.get('http://localhost:3000/products',  {
+      const res= await axios.get('/products',  {
       cancelToken: this.CancelTokenSource.token
     })
       if(res.data){

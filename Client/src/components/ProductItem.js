@@ -42,7 +42,7 @@ AddToCart = async (add_product) => {
       price: add_product.price,
       description: add_product.description
      }
-  const res = await axios.post('http://localhost:3000/cart/',product, 
+  const res = await axios.post('/cart/',product, 
   {cancelToken: this.CancelTokenSource.token})
       if(res.data) {
         console.log(res.data.message);
@@ -70,7 +70,7 @@ finally{
 InCart = async (id) => {
   this.CancelTokenSource= axios.CancelToken.source;
   try{
-  const res = await axios.get('http://localhost:3000/cart', 
+  const res = await axios.get('/cart', 
   {cancelToken: this.CancelTokenSource.token})
   if(res.data){
       for(let i=0; i<res.data.cart.length;i++){
@@ -113,9 +113,9 @@ componentWillUnmount() {
             <div className="img-container p-2" >
                 <img className="card-img-top" src={this.props.product.imagePath} alt="productImage"/>
             </div> 
-                <div className="container" align='bottom'>
+                <div className="container">
                 
-                <button className='read-btn' align='left' onClick={this.togglePopup.bind(this)}>
+                <button className='read-btn' onClick={this.togglePopup.bind(this)}>
                    Read more... </button>
                   {this.state.showPopup ? 
                   <Popup
@@ -166,14 +166,17 @@ const ProductWrapper = styled.div`
 
  .cart-btn{
    bottom:0;right:0;
-  //  padding:0.2rem 0.4rem;
+   padding:0.2rem 0.4rem;
    border:none;
+   float:right;
+
  }
  
  .read-btn{
   bottom:0;left:0;
-  // padding:0.2rem 0.4rem;
+  padding:0.2rem 0.4rem;
   background: none;
+  float:left;
   color:blue;
   border:none;
 }
@@ -188,7 +191,6 @@ const ProductWrapper = styled.div`
 }
 
 .text{
-  align:left;
   color: black;
   font-family: verdana;
   font-size: 80%;

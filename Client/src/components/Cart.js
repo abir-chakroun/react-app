@@ -1,20 +1,9 @@
 import React, {Component} from 'react';
-import { Button} from "react-bootstrap";
 import CartItem from './CartItem'
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import { withStyles } from "@material-ui/core/styles";
+
 import axios from 'axios';
-
-const CustomTableCell = withStyles(theme => ({
-  root: {
-    width: "25%"}
-  })
-  )(TableCell);
-
+import CartColumns from './CartColumns';
+import EmptyCart from './EmptyCart';
 
 class Cart extends Component {
 
@@ -33,7 +22,7 @@ class Cart extends Component {
       let totQty=0;  let totPrice=0; let i=0; 
       this.CancelTokenSource= axios.CancelToken.source;
       try {
-      const res= await axios.get('http://localhost:3000/cart',{cancelToken: this.CancelTokenSource.token}) 
+      const res= await axios.get('/cart',{cancelToken: this.CancelTokenSource.token}) 
         if(res.data){ 
               for( i=0; i<res.data.cart.length; i++){
                     totQty+= res.data.cart[i].quantity;
@@ -63,7 +52,7 @@ class Cart extends Component {
    
   componentDidMount() {
     this._isMounted = true;
-    // this._isMounted && this.getCart();
+    this._isMounted && this.getCart();
   }
 
   componentWillUnmount() {
@@ -79,39 +68,29 @@ class Cart extends Component {
 
 render(){
 
-  if ( !this.state.cart_products) {
-    return (   <div> <h1> Your cart is empty ! </h1>  
-    <Button variant='dark' href='/'> Shop Now </Button>
-    </div>
-    )
-  }
+  if ( this.state.cart_products.length>0) {
     let listItems;
     listItems = this.state.cart_products.map( (order) =>{
         return (
           <CartItem  key={order._id} _id={order._id} order={order.product} qty={order.quantity}/>
-        ) }) 
+        ) })
+        return(
+          <div >
+          <h2 className="col-10 mx-auto text-center text-title mb-5 mt-2"> Your Cart </h2>
+          <CartColumns />
     
-    return(
-      <div >
-      <h2 className="text-center"> Shopping Cart </h2>
-      <Table className="fixed">
-      <TableHead >
-        <TableRow>
-          <CustomTableCell >        </CustomTableCell>
-          <CustomTableCell>  Product   </CustomTableCell>
-          <CustomTableCell > Quantity  </CustomTableCell>
-          <CustomTableCell > PriceUnit   </CustomTableCell>
-          <CustomTableCell >        </CustomTableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
+          {listItems}
+       
+          </div>
+        )
 
-      {listItems}
+        }
+        else{
+          return ( <EmptyCart />)
+        }
 
-      </TableBody>
-      </Table>      
-      </div>
-    )
+
+
    
 }
 }

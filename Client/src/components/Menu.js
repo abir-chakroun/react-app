@@ -16,23 +16,11 @@ import Navbar from 'react-bootstrap/Navbar'
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">
     <Nav className="mr-auto">
-      <Nav.Item> <Link to="/about"> About </Link> </Nav.Item>
-      <Nav.Item> <Link to="/contact">Contact </Link> </Nav.Item>
-      <Nav.Item >User </Nav.Item>
-              <NavDropdown title="" id="basic-nav-dropdown"> 
-              <NavDropdown.Item > <Link to="/register"> Register </Link> </NavDropdown.Item>
-              <NavDropdown.Item><Link to="/login"> Login </Link></NavDropdown.Item>
-              </NavDropdown>
-      </Nav>
-      <Nav.Item >
-      <Link to="/cart"> <i className="fas fa-shopping-cart"></i>
+       <Link to="/contact"> <i class="fa fa-phone" aria-hidden="true"></i>       </Link>
+    </Nav>  
+
+      <Link to="/cart"><Button float='left' className='btn-shop'><i className="fas fa-shopping-cart"></i> Cart </Button> </Link>
       <Badge pill variant="danger" className='badge'>{}</Badge>
-      </Link>
-       </Nav.Item>
-    <Form inline>
-      <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-      <Button variant="outline-info">Search</Button>
-    </Form>
     </Navbar.Collapse>
     </Navbar>
 </div>
