@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Badge, NavDropdown, Nav } from 'react-bootstrap'
 import { Form, Button,  FormControl} from "react-bootstrap";
-import {Link} from 'react-router-dom';
 import logo from '..//images/logo.png'
+import {Link} from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar'
  class Menu extends Component{ 
 
@@ -25,7 +25,7 @@ import Navbar from 'react-bootstrap/Navbar'
               </NavDropdown>
       </Nav>
       <Nav.Item >
-      <Link to="/cart"> <i class="fas fa-shopping-cart"></i>
+      <Link to="/cart"> <i className="fas fa-shopping-cart"></i>
       <Badge pill variant="danger" className='badge'>{}</Badge>
       </Link>
        </Nav.Item>

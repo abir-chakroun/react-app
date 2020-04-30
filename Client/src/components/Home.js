@@ -22,7 +22,7 @@ constructor(){
   getProducts= async () => {
     this.CancelTokenSource= axios.CancelToken.source;
     try{
-      const res= await axios.get('/products',  {
+      const res= await axios.get('http://localhost:3000/products',  {
       cancelToken: this.CancelTokenSource.token
     })
       if(res.data){
@@ -61,8 +61,8 @@ finally{
     console.log(this.state.products);
     return (   
     <div>
-    <ControlledCarousel />
-    <Products products={this.state.products}/>
+        <ControlledCarousel />
+        <Products products={this.state.products}/>
     </div>
   )
 

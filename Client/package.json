@@ -11,14 +11,18 @@
     "bootstrap": "^4.4.1",
     "material-table": "^1.57.2",
     "react": "^16.12.0",
+    "react-awesome-popover": "^6.1.1",
     "react-bootstrap": "^1.0.0-beta.16",
+    "react-dev-utils": "^10.0.0",
     "react-dom": "^16.12.0",
     "react-fontawesome": "^1.7.1",
     "react-icons": "^3.8.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.3.0",
+    "react-simple-popover": "^0.2.4",
     "react-test-renderer": "0.0.0-b53ea6ca0",
-    "serve": "^11.3.0"
+    "serve": "^11.3.0",
+    "styled-components": "^5.1.0"
   },
   "scripts": {
     "start": "set PORT=8000 && react-scripts start",

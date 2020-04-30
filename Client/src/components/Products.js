@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ProductItem from "./ProductItem.js";
 class Products extends Component{
       
+    
     render() {
         let products = this.props.products;
         console.log(products);

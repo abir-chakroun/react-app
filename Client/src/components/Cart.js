@@ -33,11 +33,9 @@ class Cart extends Component {
       let totQty=0;  let totPrice=0; let i=0; 
       this.CancelTokenSource= axios.CancelToken.source;
       try {
-      const res= await axios.get('/cart',{cancelToken: this.CancelTokenSource.token}) 
+      const res= await axios.get('http://localhost:3000/cart',{cancelToken: this.CancelTokenSource.token}) 
         if(res.data){ 
-              console.log(res.data);
               for( i=0; i<res.data.cart.length; i++){
-                console.log(res.data.cart[i])
                     totQty+= res.data.cart[i].quantity;
                     totPrice+= res.data.cart[i].quantity * res.data.cart[i].product.price;  
               }
@@ -65,7 +63,7 @@ class Cart extends Component {
    
   componentDidMount() {
     this._isMounted = true;
-    this._isMounted && this.getCart();
+    // this._isMounted && this.getCart();
   }
 
   componentWillUnmount() {
@@ -73,10 +71,10 @@ class Cart extends Component {
  }
  
 
- componentDidUpdate(){
-  this._isMounted = true;
-  this._isMounted && this.getCart();
- }
+//  componentDidUpdate(){
+//   this._isMounted = true;
+//   this._isMounted && this.getCart();
+//  }
 
 
 render(){
@@ -88,7 +86,6 @@ render(){
     )
   }
     let listItems;
-    console.log(this.state.cart_products)
     listItems = this.state.cart_products.map( (order) =>{
         return (
           <CartItem  key={order._id} _id={order._id} order={order.product} qty={order.quantity}/>
@@ -101,9 +98,9 @@ render(){
       <TableHead >
         <TableRow>
           <CustomTableCell >        </CustomTableCell>
-          <CustomTableCell>Product </CustomTableCell>
-          <CustomTableCell >Quantity</CustomTableCell>
-          <CustomTableCell >PriceUnit   </CustomTableCell>
+          <CustomTableCell>  Product   </CustomTableCell>
+          <CustomTableCell > Quantity  </CustomTableCell>
+          <CustomTableCell > PriceUnit   </CustomTableCell>
           <CustomTableCell >        </CustomTableCell>
         </TableRow>
       </TableHead>

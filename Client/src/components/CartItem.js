@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import { Button} from "react-bootstrap";
-import '../App.css';
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import Avatar from "@material-ui/core/Avatar";
@@ -22,7 +21,7 @@ class CartItem extends Component {
   removeFromCart = async (id) =>{
     this.CancelTokenSource= axios.CancelToken.source;
     try {
-    const res= await axios.delete('/cart/'+id,
+    const res= await axios.delete('http://localhost:3000/cart/'+id,
     {cancelToken: this.CancelTokenSource.token}
     ) 
       if(res.data){ 
@@ -48,15 +47,15 @@ class CartItem extends Component {
   }
 
   MinusQuantity = async (id) => {
-      //update quantity from backend
-      const val= {value: -1};
-      this.CancelTokenSource= axios.CancelToken.source;
+    //update quantity from backend
+    const val= {value: -1};
+    this.CancelTokenSource= axios.CancelToken.source;
     try {
     if (this.state.qty===0){
           return null
     }
     else{
-    const res= await axios.put('/cart/'+id,val, {cancelToken: this.CancelTokenSource.token}) 
+    const res= await axios.put('http://localhost:3000/cart/'+ id, val, {cancelToken: this.CancelTokenSource.token}) 
       if(res.data){ 
           let Updatedqty= this.state.qty -1
           this._isMounted && this.setState({qty: Updatedqty})
@@ -89,7 +88,7 @@ class CartItem extends Component {
         return null
   }
   else{
-    const res= await axios.put('/cart/'+id,val,
+    const res= await axios.put('http://localhost:3000/cart/'+id,val,
     {cancelToken: this.CancelTokenSource.token}
     ) 
       if(res.data){ 
@@ -126,8 +125,6 @@ class CartItem extends Component {
 //  }
 
   render(){
-    console.log(this.props)
-    console.log(this.state)
 
     if(this.props.order){
       return (   
