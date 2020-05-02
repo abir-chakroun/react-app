@@ -42,7 +42,7 @@ AddToCart = async (add_product) => {
       price: add_product.price,
       description: add_product.description
      }
-  const res = await axios.post('/cart/',product, 
+  const res = await axios.post('http://localhost:3000/cart/',product, 
   {cancelToken: this.CancelTokenSource.token})
       if(res.data) {
         console.log(res.data.message);
@@ -70,7 +70,7 @@ finally{
 InCart = async (id) => {
   this.CancelTokenSource= axios.CancelToken.source;
   try{
-  const res = await axios.get('/cart', 
+  const res = await axios.get('http://localhost:3000/cart', 
   {cancelToken: this.CancelTokenSource.token})
   if(res.data){
       for(let i=0; i<res.data.cart.length;i++){

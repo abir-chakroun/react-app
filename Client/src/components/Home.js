@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import ControlledCarousel from "../components/ControlledCarousel";
-import Products from '../components/Products';
+import Products from '../components/Product/Products';
 import axios from 'axios';
 
 class Home extends Component {
@@ -22,7 +22,7 @@ constructor(){
   getProducts= async () => {
     this.CancelTokenSource= axios.CancelToken.source;
     try{
-      const res= await axios.get('/products',  {
+      const res= await axios.get('http://localhost:3000/products',  {
       cancelToken: this.CancelTokenSource.token
     })
       if(res.data){

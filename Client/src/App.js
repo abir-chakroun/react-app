@@ -3,9 +3,9 @@ import './App.css'
 import{BrowserRouter as Router , Switch, Route} from 'react-router-dom';
 import About from './components/About';
 import Contact from './components/Contact';
-import Cart from './components/Cart';
-import LoginUser from './components/LoginUser';
-import CreateUser from './components/CreateUser';
+import Cart from './components/Cart/Cart';
+import LoginUser from './components/User/LoginUser';
+import CreateUser from './components/User/CreateUser';
 import Home from './components/Home';
 import Menu from './components/Menu';
 import { createBrowserHistory } from "history";

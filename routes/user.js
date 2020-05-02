@@ -5,7 +5,8 @@ const UserController = require('../controllers/user');
 
 
 router.post('/signup',UserController.CreateUser);
-router.post('/login', UserController.LoginUser)
+router.post('/login', UserController.LoginUser);
+
 
 
 

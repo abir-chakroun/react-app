@@ -5,9 +5,9 @@ const User = require('../models/user');
 var jwt = require('jsonwebtoken');
 
 
-var CreateUser= (req,res) =>{
-User.find({email: req.body.email}).exec()
-    .then(user => {
+exports.CreateUser= (req,res) =>{
+    User.find({email: req.body.email}).exec()
+        .then(user => {
         console.log(user)
         if(user.length>=1)
             res.send({error:"user already signed in"})
@@ -18,13 +18,14 @@ User.find({email: req.body.email}).exec()
             else{
                 const user= new User({
                     _id: new mongoose.Types.ObjectId(),
+                    firstName:req.body.firstName,
+                    lastName:req.body.lastName,
                     email: req.body.email,
                     password: hash
                 })
                 user
                 .save()
                 .then(data => {
-                    console.log(data);
                     res.send({message:"user created!"})
                     })
                 .catch(err =>
@@ -35,12 +36,12 @@ User.find({email: req.body.email}).exec()
 })
 };
 
-var LoginUser= (req,res) => {
-User.find({email:req.body.email}).exec()
-    .then(user =>{
-        if(user.length <1)
-            res.status(401).end({message: "login unauthorized ! you should sign up first"})
-        else{
+exports.LoginUser= async (req,res) => {
+    await User.find({email:req.body.email}).exec()
+        .then(user =>{
+            if(user.length <1)
+                res.status(401).end({message: "login unauthorized ! you should sign up first"})
+            else{
             // Load hash from your password DB.
             bcrypt.compare(req.body.password, user[0].password, (err,result) => {
                 if(err)
@@ -50,15 +51,20 @@ User.find({email:req.body.email}).exec()
                         const token= jwt.sign({
                             email: req.body.email,
                             user_id: req.body._id
-                          }, 'secret', { expiresIn: '1h' });
-                          res.send({
-                              message: "login authorized",
-                              token: token
-                          })
-
-                    }
+                          }, 'secret', { expiresIn: '1h' }, function(err, token) {
+                              if(err) 
+                                    console.log("error");
+                              else{
+                                            res.send({
+                                            message: "user session created",
+                                            token: token
+                                        })
+                        
+                                }
+                            })
+                        }
                     else
-                        res.status(401).end({message:"login unauthorized ! wrong password"})
+                        res.send({message:"login unauthorized ! wrong password"})
 
                 }
             });
@@ -70,6 +76,3 @@ User.find({email:req.body.email}).exec()
 
 
 
-
-exports.CreateUser=CreateUser;
-exports.LoginUser=LoginUser;

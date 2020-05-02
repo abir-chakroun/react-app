@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component,memo} from 'react';
 import axios from 'axios';
 
 class CartItem extends Component {
@@ -16,7 +16,7 @@ class CartItem extends Component {
     
     this.CancelTokenSource= axios.CancelToken.source;
     try {
-    const res= await axios.delete('/cart/'+id,
+    const res= await axios.delete('http://localhost:3000/cart/'+id,
     {cancelToken: this.CancelTokenSource.token}
     ) 
       if(res.data){ 
@@ -52,7 +52,7 @@ class CartItem extends Component {
     }
     else{
     console.log('updating qty...')
-    const res= await axios.put('/cart/'+ id, val, {cancelToken: this.CancelTokenSource.token}) 
+    const res= await axios.put('http://localhost:3000/cart/'+ id, val, {cancelToken: this.CancelTokenSource.token}) 
       if(res.data){ 
           console.log(res.data)
           let Updatedqty= this.state.qty-1
@@ -83,7 +83,7 @@ class CartItem extends Component {
     this.CancelTokenSource= axios.CancelToken.source;
     try {
     const val= {value: 1};
-    const res= await axios.put('/cart/'+id,val,
+    const res= await axios.put('http://localhost:3000/cart/'+id,val,
     {cancelToken: this.CancelTokenSource.token}
     ) 
       if(res.data){ 
@@ -115,6 +115,11 @@ class CartItem extends Component {
     this._isMounted = false;
  }
 
+//  componentDidUpdate(){
+//   this._isMounted = true;
+//   this._isMounted && (this.AddQuantity() || this.MinusQuantity());
+//  }
+
   render(){
     console.log(this.props);
     if(this.props.order){
@@ -138,14 +143,14 @@ class CartItem extends Component {
 
           <div className='col-10 mx-auto col-lg-2'>
             <div className='d-flex.justify-content-center' role="group">
-              <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default btn-danger" onClick={() => this.MinusQuantity(this.props._id)}> - </button>
+              <div className="btn-group" role="group">
+                <button type="button" className="btn btn-default btn-black" onClick={() => this.MinusQuantity(this.props._id)}> - </button>
               </div>
-              <div class="btn-group" role="group">
-              <button type="button" class="btn btn-default"> {this.state.qty} </button>  
+              <div className="btn-group" role="group">
+              <button type="button" className="btn btn-default btn-black"> {this.state.qty} </button>  
                 </div>
-              <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default btn-success" onClick={() => this.AddQuantity(this.props._id)}> + </button>
+              <div className="btn-group" role="group">
+                <button type="button" className="btn btn-default btn-black" onClick={() => this.AddQuantity(this.props._id)}> + </button>
               </div>
               </div>
           </div>
@@ -158,7 +163,8 @@ class CartItem extends Component {
 
 
           <div className='col-10 mx-auto col-lg-2'>
-          <strong> item total: {this.state.total_price} DT </strong>
+          <span className='d-lg-none'> item total: </span>
+          <strong >{this.state.total_price} DT </strong> 
           </div>
 
     </div>
@@ -167,7 +173,7 @@ class CartItem extends Component {
       else{ console.log("empty props from Cart component")}
           }
 }
-export default CartItem;
+export default memo(CartItem);
 
 
 
